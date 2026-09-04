@@ -1,1 +1,89 @@
 
+# Week 4 – System Integration and Final Testing
+
+## Project Title
+
+Timer Interrupt Based LED Controller – System Integration and Final Testing
+
+## Objective
+
+The objective of Week 4 is to integrate the timer, interrupt service routine (ISR), and LED control modules developed during the previous weeks into one complete embedded system model. The integrated system is tested using a hardware-independent C simulation to verify correct module interaction and system-level functionality.
+
+## System Integration
+
+The integrated system consists of the following modules:
+
+1. Timer Tick Generator
+2. Timer Interrupt/Event Detection
+3. Timer Interrupt Service Routine (ISR)
+4. LED Control Module
+5. System Initialization
+6. Automated Testing and Validation
+
+The simulated timer generates periodic timer ticks. When the configured timer period is reached, the timer generates an interrupt event and calls the interrupt service routine. The ISR records the interrupt event and toggles the LED state.
+
+## System Configuration
+
+- Timer period: 1000 ticks
+- Simulation duration: 5000 ticks
+- Initial LED state: OFF
+- Expected interrupt events: 5
+- Expected LED toggles: 5
+- Expected final LED state: ON
+
+Starting from OFF, five LED toggles result in a final ON state.
+
+## Testing Strategy
+
+The integrated system contains automated tests to verify the main functional requirements.
+
+### Test 1 – Timer Period Verification
+
+The system is simulated for exactly one timer period of 1000 ticks.
+
+**Expected Result:**
+- One interrupt event is generated.
+- The timer counter returns to zero.
+
+### Test 2 – Interrupt Count Verification
+
+The system is simulated for 5000 ticks.
+
+**Expected Result:**
+- Five timer interrupt events are generated.
+
+### Test 3 – LED State Verification
+
+The system is simulated for 5000 ticks starting with the LED OFF.
+
+**Expected Result:**
+- The LED toggles once for every interrupt.
+- Five LED toggles occur.
+- The final LED state is ON.
+
+## Integration Challenges and Solutions
+
+### 1. Timer and ISR Coordination
+
+The timer module must generate an interrupt event when the configured timer period is reached.
+
+**Solution:** The timer counter is incremented on every simulated tick and the `>= TIMER_PERIOD_TICKS` condition is used to detect the timer threshold reliably.
+
+### 2. Maintaining LED State
+
+The LED state must change only when a timer interrupt occurs.
+
+**Solution:** Dedicated `LED_Set()` and `LED_Toggle()` functions are used for LED control. The ISR calls the LED toggle function whenever an interrupt occurs.
+
+### 3. System-Level Validation
+
+Individual modules may work correctly while integration problems can occur when they are combined.
+
+**Solution:** Automated test functions were added to verify timer behavior, interrupt generation, interrupt count, and LED state.
+
+## Compilation and Execution
+
+The program can be compiled using GCC:
+
+```bash
+gcc timer_led_system_integration.c -o timer_led_system_integration
